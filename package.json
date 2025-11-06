@@ -1,6 +1,6 @@
 {
-  "name": "@solwarrior/x402-cli",
-  "version": "0.1.0",
+  "name": "x402-cli",
+  "version": "0.1.2",
   "description": "A professional CLI tool for simulating and testing Solana x402 payments (micropayments between agents and APIs)",
   "main": "dist/cli.js",
   "bin": {
@@ -27,9 +27,13 @@
     "micropayments",
     "cli",
     "blockchain",
-    "web3"
+    "web3",
+    "x402-cli"
   ],
-  "author": "SolWarrior",
+  "author": {
+    "name": "solwarrior",
+    "email": "x.com/warriorofsol"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",

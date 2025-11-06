@@ -2,7 +2,7 @@
 
 > A professional CLI tool for simulating and testing Solana x402 payments (micropayments between agents and APIs)
 
-[![CI](https://github.com/solwarrior/x402-cli/workflows/CI/badge.svg)](https://github.com/solwarrior/x402-cli/actions)
+[![CI](https://github.com/sol-warrior/x402-cli/workflows/CI/badge.svg)](https://github.com/sol-warrior/x402-cli/actions)
 [![npm version](https://img.shields.io/npm/v/x402-cli.svg)](https://www.npmjs.com/package/x402-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -40,7 +40,7 @@ npx @solwarrior/x402-cli --help
 ### From Source
 
 ```bash
-git clone https://github.com/solwarrior/x402-cli.git
+git clone https://github.com/sol-warrior/x402-cli.git
 cd x402-cli
 npm install
 npm run build
@@ -164,7 +164,7 @@ See [ARCHITECTURE.md](./docs/architecture.md) for detailed architecture document
 ### Setup
 
 ```bash
-git clone https://github.com/solwarrior/x402-cli.git
+git clone https://github.com/sol-warrior/x402-cli.git
 cd x402-cli
 npm install
 ```
@@ -227,12 +227,12 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ## Support
 
 - 📖 [Documentation](./docs/)
-- 🐛 [Issue Tracker](https://github.com/solwarrior/x402-cli/issues)
-- 💬 [Discussions](https://github.com/solwarrior/x402-cli/discussions)
+- 🐛 [Issue Tracker](https://github.com/sol-warrior/x402-cli/issues)
+- 💬 [Discussions](https://github.com/sol-warrior/x402-cli/discussions)
 
 ## Acknowledgments
 
-Built with ❤️ by [SolWarrior](https://github.com/solwarrior)
+Built with ❤️ by [SolWarrior](https://github.com/sol-warrior)
 
 Inspired by the Solana x402 protocol and micropayment innovations in the Web3 ecosystem.
 

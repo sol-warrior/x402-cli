@@ -28,13 +28,13 @@
 ### Using npm
 
 ```bash
-npm install -g x402-cli
+npm install -g @solwarrior/x402-cli
 ```
 
 ### Using npx (no installation required)
 
 ```bash
-npx x402-cli --help
+npx @solwarrior/x402-cli --help
 ```
 
 ### From Source

@@ -240,4 +240,3 @@ Inspired by the Solana x402 protocol and micropayment innovations in the Web3 ec
 
 - [@solana/web3.js](https://github.com/solana-labs/solana-web3.js) - Solana JavaScript SDK
 - [Solana CLI](https://docs.solana.com/cli) - Official Solana CLI tool
-

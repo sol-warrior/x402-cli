@@ -51,6 +51,7 @@ x402-cli/
 ### CLI Entry Point (`cli.ts`)
 
 The main entry point that:
+
 - Sets up Commander.js program
 - Registers all commands
 - Handles global options (verbose, version)
@@ -59,12 +60,14 @@ The main entry point that:
 ### Commands (`commands/`)
 
 Each command is a self-contained module that:
+
 - Exports a `createXCommand()` function
 - Returns a configured Commander.js `Command` instance
 - Handles command-specific logic
 - Uses core modules for business logic
 
 **Design Pattern:**
+
 - Commands are thin wrappers around core logic
 - All business logic lives in `core/` modules
 - Commands handle CLI-specific concerns (parsing, output formatting)
@@ -74,12 +77,14 @@ Each command is a self-contained module that:
 #### `solana.ts`
 
 Handles all Solana blockchain interactions:
+
 - Connection management
 - Transaction creation and sending
 - Keypair loading and management
 - Balance queries
 
 **Design Decisions:**
+
 - Uses `@solana/web3.js` for blockchain interactions
 - Supports multiple networks (devnet, mainnet-beta, testnet)
 - Current implementation uses file-based keypairs (for development)
@@ -88,11 +93,13 @@ Handles all Solana blockchain interactions:
 #### `config.ts`
 
 Manages CLI configuration:
+
 - Loads/saves configuration from `~/.x402-cli/config.json`
 - Provides defaults
 - Handles configuration merging
 
 **Design Decisions:**
+
 - Configuration stored in user's home directory
 - JSON format for human readability
 - Graceful fallback to defaults on corruption
@@ -100,11 +107,13 @@ Manages CLI configuration:
 #### `logger.ts`
 
 Provides colored, formatted console output:
+
 - Info, success, warning, error, debug levels
 - Uses `chalk` for colors
 - Verbose mode support
 
 **Design Decisions:**
+
 - Centralized logging for consistent output
 - Verbose mode for debugging
 - Console-based (no file logging for CLI)
@@ -112,12 +121,14 @@ Provides colored, formatted console output:
 #### `utils.ts`
 
 Shared utility functions:
+
 - Address validation
 - SOL/lamports conversion
 - Address truncation
 - Network RPC URL resolution
 
 **Design Decisions:**
+
 - Pure functions where possible
 - Reusable across commands
 - Well-tested
@@ -125,6 +136,7 @@ Shared utility functions:
 ### Types (`types/`)
 
 Centralized TypeScript type definitions:
+
 - `CliConfig` - Configuration structure
 - `PaymentOptions` - Payment command options
 - `PaymentResult` - Payment operation result
@@ -236,6 +248,7 @@ interface CliConfig {
 
 Current: File-based keypairs
 Future: Wallet adapter integration
+
 - Support for browser wallets (Phantom, Solflare)
 - CLI wallet prompts
 - Hardware wallet support
@@ -243,6 +256,7 @@ Future: Wallet adapter integration
 ### Facilitator Services
 
 Future: `facilitator.ts` module
+
 - Facilitator discovery
 - Payment routing
 - Fee calculation
@@ -250,6 +264,7 @@ Future: `facilitator.ts` module
 ### Mock Server
 
 Future: `mock-server.ts` command
+
 - Express.js server
 - x402 API simulation
 - Test payment endpoints
@@ -308,4 +323,3 @@ Future: `mock-server.ts` command
 - Follows semantic versioning (semver)
 - Automated via GitHub Actions on tag push
 - Pre-publish checks: build, test, lint
-

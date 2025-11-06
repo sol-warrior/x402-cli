@@ -1,0 +1,66 @@
+{
+  "name": "x402-cli",
+  "version": "0.1.0",
+  "description": "A professional CLI tool for simulating and testing Solana x402 payments (micropayments between agents and APIs)",
+  "main": "dist/cli.js",
+  "bin": {
+    "x402-cli": "./dist/cli.js",
+    "x402": "./dist/cli.js"
+  },
+  "types": "dist/cli.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"*.{json,md}\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"*.{json,md}\"",
+    "prepublishOnly": "npm run build",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "solana",
+    "x402",
+    "micropayments",
+    "cli",
+    "blockchain",
+    "web3"
+  ],
+  "author": "SolWarrior",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solwarrior/x402-cli.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.87.6",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vitest/coverage-v8": "^1.0.4",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "husky": "^8.0.3",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
+}
+

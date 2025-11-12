@@ -5,9 +5,11 @@
 /**
  * Configuration for the CLI
  */
+export type SolanaNetwork = 'devnet' | 'mainnet-beta' | 'testnet';
+
 export interface CliConfig {
   rpcUrl?: string;
-  network?: 'devnet' | 'mainnet-beta' | 'testnet';
+  network?: SolanaNetwork;
   defaultWallet?: string;
 }
 
@@ -18,7 +20,7 @@ export interface PaymentOptions {
   recipient: string;
   amount: number; // SOL amount
   from?: string; // Optional: specific wallet path
-  network?: 'devnet' | 'mainnet-beta' | 'testnet';
+  network?: SolanaNetwork;
   skipPreflight?: boolean;
 }
 
@@ -40,6 +42,19 @@ export interface PaymentResult {
 export interface VerificationResult {
   isValid: boolean;
   signature: string;
+  network: SolanaNetwork;
+  status: 'processed' | 'confirmed' | 'finalized' | 'failed' | 'not_found' | 'pending';
+  confirmationStatus?: 'processed' | 'confirmed' | 'finalized';
+  slot?: number;
+  blockTime?: number | null;
+  blockTimeIso?: string;
+  amountLamports?: number;
+  amountSol?: number;
+  feeLamports?: number;
+  source?: string;
+  destination?: string;
+  memo?: string | null;
+  error?: string;
   message?: string;
 }
 

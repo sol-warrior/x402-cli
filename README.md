@@ -6,6 +6,18 @@
 [![npm version](https://img.shields.io/npm/v/x402-cli.svg)](https://www.npmjs.com/package/x402-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=IroKxIr_zgI">
+    <img src="https://img.youtube.com/vi/IroKxIr_zgI/maxresdefault.jpg" width="100%" />
+  </a>
+</p>
+
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=IroKxIr_zgI"> <em>🎥 Watch full demo on YouTube</em>  </a>
+</p>
+
 ## Overview
 
 `x402-cli` is a production-ready TypeScript CLI tool designed to help developers simulate, test, and interact with Solana x402 payment protocols. It provides a clean, intuitive interface for sending micropayments on Solana networks and will support advanced features like signature verification, mock API servers, and facilitator services.

@@ -39,7 +39,7 @@ export function loadConfig(): CliConfig {
 /**
  * Save configuration to file
  */
-export function saveConfig(config: CliConfig): void {
+export function saveConfig(config: Partial<CliConfig>): void {
   // Ensure config directory exists
   if (!existsSync(CONFIG_DIR)) {
     mkdirSync(CONFIG_DIR, { recursive: true });

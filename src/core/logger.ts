@@ -38,6 +38,24 @@ class Logger {
   }
 
   /**
+   * Log banner message
+   */
+  banner(title: string, subtitle?: string): void {
+    const width = Math.max(title.length, subtitle ? subtitle.length : 0) + 6;
+    const border = '─'.repeat(width);
+    console.log('');
+    console.log(chalk.cyanBright(`┌${border}┐`));
+    const titleLine = `│   ${title.padEnd(width - 6)}   │`;
+    console.log(chalk.cyanBright(titleLine));
+    if (subtitle) {
+      const subtitleLine = `│   ${subtitle.padEnd(width - 6)}   │`;
+      console.log(chalk.cyanBright(subtitleLine));
+    }
+    console.log(chalk.cyanBright(`└${border}┘`));
+    console.log('');
+  }
+
+  /**
    * Log error message
    */
   error(message: string): void {

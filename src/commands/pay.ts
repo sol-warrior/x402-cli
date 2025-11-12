@@ -9,6 +9,7 @@ import { logger } from '../core/logger';
 import { loadConfig } from '../core/config';
 import { truncateAddress } from '../core/utils';
 import { PaymentResult, SolanaNetwork } from '../types';
+import chalk from 'chalk';
 
 interface PayCommandOptions {
   recipient: string;
@@ -61,16 +62,30 @@ export function createPayCommand(): Command {
         spinner.stop();
 
         if (result.status === 'success') {
-          logger.success(`Payment successful!`);
-          logger.raw(`\nTransaction Details:`);
-          logger.raw(`  Recipient: ${result.recipient}`);
-          logger.raw(`  Amount: ${result.amount} SOL`);
-          logger.raw(`  Network: ${result.network}`);
-          logger.raw(`  Signature: ${result.signature}`);
-          logger.raw(`\nView on Solana Explorer:`);
-          logger.raw(
-            `  https://explorer.solana.com/tx/${result.signature}?cluster=${result.network === 'mainnet-beta' ? '' : result.network}`
-          );
+          logger.success('Payment successful!');
+          logger.raw('');
+          logger.info(chalk.bold('Transaction Summary'));
+
+          const printDetail = (label: string, value?: string | number) => {
+            if (value === undefined || value === null || value === '') {
+              return;
+            }
+            const formattedLabel = chalk.gray(`${label.padEnd(14)}:`);
+            logger.raw(`  ${formattedLabel} ${value}`);
+          };
+
+          printDetail('Recipient', chalk.white(result.recipient));
+          printDetail('Amount', chalk.cyan(`${result.amount} SOL`));
+          printDetail('Network', chalk.white(network.toUpperCase()));
+          printDetail('Signature', chalk.cyan(result.signature));
+
+          logger.raw('');
+          logger.info(chalk.bold('Explorer'));
+          const isMainnet = network === 'mainnet-beta';
+          const explorerUrl = isMainnet
+            ? `https://explorer.solana.com/tx/${result.signature}`
+            : `https://explorer.solana.com/tx/${result.signature}?cluster=${network}`;
+          logger.raw(`  ${chalk.blueBright(explorerUrl)}`);
         } else {
           logger.error(`Payment failed: ${result.error || 'Unknown error'}`);
           process.exit(1);

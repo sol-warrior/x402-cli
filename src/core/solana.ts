@@ -10,19 +10,17 @@ import {
   SystemProgram,
   Transaction,
   sendAndConfirmTransaction,
+  type Finality,
 } from '@solana/web3.js';
 import { readFileSync } from 'fs';
-import { PaymentOptions, PaymentResult } from '../types';
+import { PaymentOptions, PaymentResult, SolanaNetwork, VerificationResult } from '../types';
 import { logger } from './logger';
 import { solToLamports, getNetworkRpcUrl } from './utils';
 
 /**
  * Create Solana connection
  */
-export function createConnection(
-  rpcUrl?: string,
-  network: 'devnet' | 'mainnet-beta' | 'testnet' = 'devnet'
-): Connection {
+export function createConnection(rpcUrl?: string, network: SolanaNetwork = 'devnet'): Connection {
   const url = rpcUrl || getNetworkRpcUrl(network);
   return new Connection(url, 'confirmed');
 }
@@ -138,7 +136,7 @@ export async function sendPayment(options: PaymentOptions): Promise<PaymentResul
 export async function getBalance(
   address: string,
   rpcUrl?: string,
-  network: 'devnet' | 'mainnet-beta' | 'testnet' = 'devnet'
+  network: SolanaNetwork = 'devnet'
 ): Promise<number> {
   try {
     const pubkey = new PublicKey(address);
@@ -149,5 +147,179 @@ export async function getBalance(
     throw new Error(
       `Failed to get balance: ${error instanceof Error ? error.message : String(error)}`
     );
+  }
+}
+
+export type VerificationCommitment = 'processed' | Finality;
+
+export interface VerifyTransactionOptions {
+  network?: SolanaNetwork;
+  rpcUrl?: string;
+  commitment?: VerificationCommitment;
+  connection?: Connection;
+}
+
+/**
+ * Verify a transaction signature and extract payment details
+ */
+export async function verifyTransactionSignature(
+  signature: string,
+  options: VerifyTransactionOptions = {}
+): Promise<VerificationResult> {
+  const {
+    network = 'devnet',
+    rpcUrl,
+    commitment = 'confirmed',
+    connection: providedConnection,
+  } = options;
+
+  const connection = providedConnection ?? createConnection(rpcUrl, network);
+
+  try {
+    const statusResponse = await connection.getSignatureStatuses([signature], {
+      searchTransactionHistory: true,
+    });
+    const status = statusResponse.value[0];
+
+    if (!status) {
+      return {
+        isValid: false,
+        signature,
+        network,
+        status: 'not_found',
+        message: 'Signature not found. It may be incorrect or pruned from RPC history.',
+      };
+    }
+
+    if (status.err) {
+      return {
+        isValid: false,
+        signature,
+        network,
+        status: 'failed',
+        confirmationStatus: status.confirmationStatus ?? undefined,
+        slot: status.slot ?? undefined,
+        error: typeof status.err === 'string' ? status.err : JSON.stringify(status.err),
+        message: 'Transaction execution failed.',
+      };
+    }
+
+    const confirmationStatus = status.confirmationStatus ?? 'processed';
+    let derivedStatus: VerificationResult['status'] = 'pending';
+
+    if (confirmationStatus === 'confirmed') {
+      derivedStatus = 'confirmed';
+    } else if (confirmationStatus === 'finalized') {
+      derivedStatus = 'finalized';
+    } else if (confirmationStatus === 'processed') {
+      derivedStatus = 'pending';
+    }
+
+    const parsedCommitment: Finality | undefined =
+      commitment === 'processed' ? undefined : commitment;
+
+    const parsedTransaction = await connection.getParsedTransaction(signature, {
+      commitment: parsedCommitment,
+      maxSupportedTransactionVersion: 0,
+    });
+
+    if (!parsedTransaction) {
+      return {
+        isValid: derivedStatus === 'confirmed' || derivedStatus === 'finalized',
+        signature,
+        network,
+        status: derivedStatus,
+        confirmationStatus: confirmationStatus === 'processed' ? undefined : confirmationStatus,
+        slot: status.slot ?? undefined,
+        message:
+          derivedStatus === 'pending'
+            ? 'Transaction is pending confirmation. Try again shortly.'
+            : 'Transaction confirmed but detailed data is unavailable (RPC history may be trimmed).',
+      };
+    }
+
+    const meta = parsedTransaction.meta;
+
+    if (meta?.err) {
+      return {
+        isValid: false,
+        signature,
+        network,
+        status: 'failed',
+        confirmationStatus: confirmationStatus === 'processed' ? undefined : confirmationStatus,
+        slot: parsedTransaction.slot,
+        error: typeof meta.err === 'string' ? meta.err : JSON.stringify(meta.err),
+        message: 'Transaction failed during execution.',
+      };
+    }
+
+    const blockTime = parsedTransaction.blockTime ?? null;
+    let amountLamports: number | undefined;
+    let amountSol: number | undefined;
+    let source: string | undefined;
+    let destination: string | undefined;
+    let memo: string | null | undefined;
+
+    const instructions = parsedTransaction.transaction.message.instructions ?? [];
+
+    for (const instruction of instructions) {
+      if ('parsed' in instruction && instruction.program === 'system') {
+        if (instruction.parsed?.type === 'transfer') {
+          const info = instruction.parsed.info as {
+            source: string;
+            destination: string;
+            lamports: number;
+          };
+          source = info.source;
+          destination = info.destination;
+          amountLamports = info.lamports;
+          amountSol = info.lamports / LAMPORTS_PER_SOL;
+        }
+      }
+
+      if ('parsed' in instruction && instruction.program === 'spl-memo') {
+        memo = (instruction.parsed as { info?: { memo?: string } }).info?.memo ?? null;
+      }
+    }
+
+    if (!memo && typeof meta?.logMessages !== 'undefined') {
+      const memoLog = meta.logMessages?.find(msg => msg.startsWith('Program log: Memo'));
+      if (memoLog) {
+        const match = memoLog.match(/Program log: Memo \(len \d+\):\s*(.*)$/);
+        memo = match ? match[1] : memoLog.replace('Program log: Memo', '').trim();
+      }
+    }
+
+    return {
+      isValid: true,
+      signature,
+      network,
+      status: derivedStatus,
+      confirmationStatus: confirmationStatus === 'processed' ? undefined : confirmationStatus,
+      slot: parsedTransaction.slot,
+      blockTime,
+      blockTimeIso: blockTime ? new Date(blockTime * 1000).toISOString() : undefined,
+      amountLamports,
+      amountSol,
+      feeLamports: meta?.fee,
+      source,
+      destination,
+      memo: typeof memo === 'undefined' ? null : memo,
+      message: 'Transaction verified successfully.',
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return {
+      isValid: false,
+      signature,
+      network,
+      status: 'failed',
+      message: 'Failed to verify transaction.',
+      error: errorMessage,
+    };
+  } finally {
+    if (!options.connection) {
+      // no-op: connection is managed externally by RPC client
+    }
   }
 }

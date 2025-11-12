@@ -5,6 +5,13 @@
 import { Command } from 'commander';
 import { logger } from '../core/logger';
 import { saveConfig, getConfigPath } from '../core/config';
+import type { CliConfig, SolanaNetwork } from '../types';
+
+interface InitCommandOptions {
+  network?: string;
+  rpcUrl?: string;
+  wallet?: string;
+}
 
 export function createInitCommand(): Command {
   const command = new Command('init');
@@ -18,17 +25,17 @@ export function createInitCommand(): Command {
     )
     .option('-r, --rpc-url <url>', 'Custom RPC URL')
     .option('-w, --wallet <path>', 'Default wallet keypair path')
-    .action(async options => {
+    .action(async (options: InitCommandOptions) => {
       try {
-        const config: Record<string, string> = {};
+        const config: Partial<CliConfig> = {};
 
         if (options.network) {
-          const validNetworks = ['devnet', 'mainnet-beta', 'testnet'];
-          if (!validNetworks.includes(options.network)) {
+          const validNetworks: SolanaNetwork[] = ['devnet', 'mainnet-beta', 'testnet'];
+          if (!validNetworks.includes(options.network as SolanaNetwork)) {
             logger.error(`Invalid network. Must be one of: ${validNetworks.join(', ')}`);
             process.exit(1);
           }
-          config.network = options.network;
+          config.network = options.network as SolanaNetwork;
         }
 
         if (options.rpcUrl) {
@@ -39,7 +46,7 @@ export function createInitCommand(): Command {
           config.defaultWallet = options.wallet;
         }
 
-        saveConfig(config as any);
+        saveConfig(config);
         logger.success('Configuration saved successfully!');
         logger.info(`Config file: ${getConfigPath()}`);
       } catch (error) {

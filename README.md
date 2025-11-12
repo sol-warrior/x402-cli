@@ -232,7 +232,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## Acknowledgments
 
-Built with ❤️ by [SolWarrior](https://github.com/sol-warrior)
+Built with ❤️ by [Nishant](https://github.com/sol-warrior)
 
 Inspired by the Solana x402 protocol and micropayment innovations in the Web3 ecosystem.
 

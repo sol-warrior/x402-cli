@@ -9,6 +9,7 @@ This document outlines the planned features and improvements for `x402-cli`.
 - Core CLI infrastructure
 - `pay` command - Send SOL payments
 - `init` command - Configuration management
+- `verify` command - Transaction verification
 - Configuration system
 - Logging and error handling
 - Unit tests
@@ -16,21 +17,6 @@ This document outlines the planned features and improvements for `x402-cli`.
 - Documentation
 
 ## Short-term (v0.2.0 - v0.3.0)
-
-### Verify Command (v0.2.0)
-
-- [ ] Implement signature verification
-- [ ] Verify transaction signatures
-- [ ] Display transaction details
-- [ ] Support for multiple verification methods
-- [ ] Integration tests
-
-**Example Usage:**
-
-```bash
-x402-cli verify <signature>
-x402-cli verify <signature> --network devnet
-```
 
 ### Enhanced Pay Command (v0.2.0)
 

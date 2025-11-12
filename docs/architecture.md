@@ -20,7 +20,7 @@ x402-cli/
 │   ├── cli.ts                 # Main CLI entry point
 │   ├── commands/              # Command implementations
 │   │   ├── pay.ts            # Pay command
-│   │   ├── verify.ts         # Verify command (future)
+│   │   ├── verify.ts         # Verify command
 │   │   ├── init.ts           # Init command
 │   │   └── mock-server.ts    # Mock server (future)
 │   ├── core/                  # Core business logic
@@ -82,6 +82,7 @@ Handles all Solana blockchain interactions:
 - Transaction creation and sending
 - Keypair loading and management
 - Balance queries
+- Transaction verification and parsing
 
 **Design Decisions:**
 
@@ -178,6 +179,25 @@ commands/init.ts (parse options)
 core/config.ts (saveConfig)
   ↓
 core/logger.ts (output success)
+  ↓
+Exit
+```
+
+### Verify Command Flow
+
+```
+User Input
+  ↓
+cli.ts (parse args)
+  ↓
+commands/verify.ts (parse options, handle output)
+  ↓
+core/solana.ts (verifyTransactionSignature)
+  ├─→ Fetch signature status
+  ├─→ Load parsed transaction details
+  └─→ Extract transfer metadata (amount, accounts, memo)
+  ↓
+core/logger.ts (display summary or errors)
   ↓
 Exit
 ```

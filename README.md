@@ -13,12 +13,12 @@
 ## Features
 
 - ✅ **Send SOL Payments** - Transfer SOL tokens on devnet, mainnet-beta, or testnet
+- ✅ **Verify Signatures** - Confirm transaction status, amounts, memos, and recipients
 - 🔄 **Configuration Management** - Persistent CLI configuration with `init` command
 - 🎨 **Beautiful CLI Output** - Color-coded logs and progress indicators
 - 🔒 **Wallet Integration** - Secure keypair management (file-based)
 - 📋 **Transaction Details** - Links to Solana Explorer for transaction verification
 - 🚧 **Coming Soon**:
-  - Signature verification (`verify` command)
   - Mock API server for testing (`mock-server` command)
   - Agent payment workflows (`agent-pay` command)
   - Facilitator services integration
@@ -120,12 +120,28 @@ Options:
 x402-cli init --network devnet --wallet ~/.config/solana/id.json
 ```
 
-### Verify Command (Coming Soon)
+### Verify Command
 
-Verify payment signatures.
+Verify Solana transaction signatures and display payment details.
 
 ```bash
-x402-cli verify <signature>
+x402-cli verify <signature> [options]
+
+Options:
+  -n, --network <network>     Network: devnet, mainnet-beta, or testnet (default: devnet)
+  --rpc-url <url>             Custom RPC URL
+  -c, --commitment <level>    Commitment level: processed, confirmed, or finalized (default: confirmed)
+  --json                      Output JSON payload for scripting
+  -h, --help                  Display help for command
+```
+
+**Example:**
+
+```bash
+x402-cli verify 5dKq...abc123 --network devnet
+
+# Output as JSON for automation
+x402-cli verify 5dKq...abc123 --json
 ```
 
 ### Mock Server Command (Coming Soon)
@@ -232,7 +248,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## Acknowledgments
 
-Built with ❤️ by [SolWarrior](https://github.com/sol-warrior)
+Built with ❤️ by [Nishant](https://github.com/sol-warrior)
 
 Inspired by the Solana x402 protocol and micropayment innovations in the Web3 ecosystem.
 

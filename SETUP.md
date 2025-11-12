@@ -39,7 +39,7 @@ x402-cli/
 │   ├── cli.ts                      ✅ Main CLI entry point
 │   ├── commands/
 │   │   ├── pay.ts                  ✅ Pay command (fully implemented)
-│   │   ├── verify.ts               ✅ Placeholder (future)
+│   │   ├── verify.ts               ✅ Verify command (fully implemented)
 │   │   ├── init.ts                 ✅ Init command (fully implemented)
 │   │   └── mock-server.ts          ✅ Placeholder (future)
 │   ├── core/
@@ -52,7 +52,7 @@ x402-cli/
 │   │   └── index.d.ts              ✅ TypeScript types
 │   └── tests/
 │       ├── pay.test.ts             ✅ Unit tests
-│       ├── verify.test.ts          ✅ Placeholder tests
+│       ├── verify.test.ts          ✅ Verification unit tests
 │       └── mock-server.test.ts     ✅ Placeholder tests
 ├── .github/
 │   └── workflows/
@@ -108,6 +108,7 @@ x402-cli/
 
 - ✅ **Pay Command** - Send SOL payments on devnet/mainnet/testnet
 - ✅ **Init Command** - Configure CLI settings
+- ✅ **Verify Command** - Validate signatures and display transaction details
 - ✅ **Configuration System** - Persistent config in `~/.x402-cli/config.json`
 - ✅ **Logging** - Color-coded console output with chalk
 - ✅ **Error Handling** - User-friendly error messages
@@ -119,7 +120,6 @@ x402-cli/
 
 ## Future Commands (Placeholders Created)
 
-- 🔄 **verify** - Signature verification (coming soon)
 - 🔄 **mock-server** - Mock API server (coming soon)
 - 🔄 **agent-pay** - Agent payment workflows (not yet started)
 - 🔄 **facilitator** - Facilitator services (not yet started)
